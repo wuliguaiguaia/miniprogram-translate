@@ -1,0 +1,27 @@
+<!--pages/message/message.wxml-->
+
+<view class='container'>
+  <view class='flex form'>
+    <input type="text" placeholder='留个言吧~' bindinput='bindContentInput' value='{{content}}' />
+    <button form-type="submit" bindtap='onSend' plain='true' hover-class='none'>发表</button>
+  </view>
+  <scroll-view scroll-y class='list'>
+    <view class="item" style="background-color:{{colorArr[index]}}" wx:for="{{messages}}" wx:for-index="index" wx:for-item="message" wx:key="index" data-name="{{message.name}}" data-time="{{message.time}}" data-content="{{message.content}}" bindlongpress='onDeleteMes'>
+      <view class='top flex'>
+        <view class='pic'>
+          <image src='{{message.avatar}}' alt="头像" style="width: 75rpx; height: 75rpx; margin-right:30rpx;border-radius:50%" mode=''></image>
+        </view>
+        <view class='info flex-col'>
+          <text class='name'>{{message.name}}</text>
+          <text class='time'>{{message.time}}</text>
+        </view>
+      </view>
+      <view class='bottom'>
+        <text class='content'>{{message.content}}</text>
+      </view>
+    </view>
+  </scroll-view>
+  <view class='text-bottom copyright'>
+    <text>©2018-12 Alias Translate 1.0</text>
+  </view>
+</view>

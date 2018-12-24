@@ -1,0 +1,35 @@
+<!--pages/person/person.wxml-->
+
+<view class="container">
+  <view class='userinfo'>
+    <view class='user-avatar'>
+      <open-data type="userAvatarUrl"></open-data>
+    </view>
+    <view class='user-name'>
+      <open-data type="userNickName"></open-data>
+    </view>
+  </view>
+  <view class='favorite'>
+    <navigator url="../favorite/favorite" open-type="switchTab" class="uploader-text">
+      <icon class='iconfont icon-lvsefenkaicankaoxianban-'></icon>
+      <text>查看收藏</text>
+    </navigator>
+  </view>
+  <view class='message'>
+    <navigator url="../message/message" open-type="navigate" class="uploader-text">
+      <icon class='iconfont icon-message-circle'></icon>
+      <text>欢迎留言</text>
+      <button open-type='getUserInfo' bindgetuserinfo="onGotUserInfo" hover-class="none" plain="true"></button>
+    </navigator>
+  </view>
+  <view class='about'>
+    <navigator url="../about/about" open-type="navigate" class="uploader-text">
+      <icon class='iconfont icon-my'></icon>
+      <text>关于作者</text>
+    </navigator>
+  </view>
+
+  <view class='text-bottom copyright'>
+    <text>©2018-12 Alias Translate</text>
+  </view>
+</view>

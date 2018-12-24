@@ -1,0 +1,62 @@
+/* pages/message/message.wxss */
+@import "./../../style/guide.wxss";
+
+page {
+  background: #fff;
+}
+
+.list {
+  color: #fff;
+  margin: 0;
+}
+
+.list .item {
+  width: 92vw;
+  margin: 15rpx auto;
+  background: #42a9f4;
+  padding: 20rpx;
+  border-radius: 5rpx;
+  justify-content: space-between;
+}
+
+.container .form {
+  flex-direction: row;
+  font-size: 40rpx;
+  align-items: center;
+  background: #efefef;
+  height: 120rpx;
+}
+
+input {
+  flex: 1;
+  font-size: 40rpx;
+  line-height: 70rpx;
+  height: 70rpx;
+  background-color: #fff;
+}
+
+.form button {
+  font-size: 40rpx;
+  width: 25%;
+  border-radius: 0;
+  padding: 0;
+  border:none;
+  line-height: 70rpx;
+  border-left: 1px solid #ccc;
+  background-color: rgb(214, 214, 214);
+  color: #fff
+}
+
+.item .top{
+  font-size: 25rpx;
+
+}
+
+.item .bottom{
+  padding: 30rpx;
+  text-align: center;
+}
+
+.bottom .content{
+  word-break: break-all;
+}

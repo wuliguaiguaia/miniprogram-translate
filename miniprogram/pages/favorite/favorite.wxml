@@ -1,0 +1,13 @@
+<!--pages/favorite/favorite.wxml-->
+<view class='container'>
+  <view class='list'>
+    <view class='item flex' wx:for="{{favorities}}" wx:key="index" data-item="{{item}}" bindtap='onGoIndx'>
+      <view class='content flex-col'>
+        <text>{{item.query}}</text>
+        <text>{{item.result}}</text>
+      </view>
+      <icon class='iconfont icon-shoucang' catchtap='catchLike' hidden="{{!notlikeArr[index]}}" data-item="{{item}}" data-index="{{index}}"></icon>
+      <icon class='iconfont icon-star__ right' catchtap='catchUnLike' hidden="{{notlikeArr[index]}}" data-item="{{item}}" data-index="{{index}}"></icon>
+    </view>
+  </view>
+</view>

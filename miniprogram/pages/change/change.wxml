@@ -1,0 +1,8 @@
+<!--pages/change/change.wxml-->
+<view class='container'>
+  <view class='list'>
+    <view class='item' wx:for="{{langList}}" wx:for-item="language" wx:key="index" data-chs="{{language.chs}}" data-lang="{{language.lang}}" data-index="{{language.index}}" bindtap='onChooseLang'>{{language.chs}}
+      <icon class='iconfont icon-right' wx:if="{{chooseIndex == index}}" ></icon>
+    </view>
+  </view>
+</view>

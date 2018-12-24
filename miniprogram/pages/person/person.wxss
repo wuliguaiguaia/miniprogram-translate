@@ -1,0 +1,74 @@
+/* pages/person/person.wxss */
+
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.userinfo, .favorite, .message, .about {
+  width: 100%;
+  margin-top: 40rpx;
+  height: 140rpx;
+  background: #fff;
+  color: #333;
+  transition: all 300ms ease;
+  font-size: 35rpx;
+}
+
+.favorite  .iconfont {
+  color: rgb(113, 226, 189);
+}
+
+.message  .iconfont {
+  color: lightskyblue;
+}
+
+.message {
+  position: relative;
+}
+
+.message button {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.button-hover{
+  background: #fff;
+}
+
+.about  .iconfont {
+  color: rgb(254, 179, 179);
+}
+
+.iconfont {
+  font-size: 50rpx;
+  margin-top: -22rpx;
+  margin: 0 40rpx;
+}
+
+navigator {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.userinfo {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  margin-left: 30rpx;
+}
+
+.user-name {
+  margin-left: 60rpx;
+}

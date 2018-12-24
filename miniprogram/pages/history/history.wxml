@@ -1,0 +1,17 @@
+<!--pages/history/history.wxml-->
+<view  class='container'>
+  <view class='list'>
+    <view class='item flex' wx:for="{{histories}}" wx:for-item="history" wx:key="index" data-query="{{history.query}}" data-result="{{language.result}}" data-history="{{history}}" bindtap='onReview'>
+      <icon class='iconfont icon-history'></icon>
+      <view class='flex-col content'>
+        <text>{{history.query}}</text>
+        <text>{{history.result}}</text>
+      </view>
+      {{history.chs}}
+      <icon class='iconfont icon-delete' catchtap='onDeleteThis' data-index="index"></icon>
+    </view>
+  </view>
+  <view class='text-bottom'>
+    <text bindtap='onClearHis' wx:if="{{clearAlltag}}">清空所有历史</text>
+  </view>
+</view>

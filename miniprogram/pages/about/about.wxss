@@ -1,0 +1,9 @@
+/* pages/about/about.wxss */
+.container{
+  background: #42a9f4;
+  color: #fff;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

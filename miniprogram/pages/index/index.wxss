@@ -1,0 +1,108 @@
+/**index.wxss**/
+
+page {
+  background: #efefef;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.control {
+  border-bottom: 1px solid #ccc;
+  line-height: 80rpx;
+  padding: 0 40rpx;
+  position: relative;
+  color: #42a9f4;
+  background: #fff;
+}
+
+.iconfont.icon-delete {
+  font-size: 50rpx;
+}
+
+.control > view:last-of-type {
+  display: inline-block;
+  text-align: right;
+}
+
+.control .change {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.prev-box {
+  padding: 30rpx;
+  min-height: 30vh;
+  background-color: #fff;
+}
+
+.prev-top {
+  width: 94vw;
+  margin-top: -15rpx;
+  height: 90rpx;
+}
+
+.container .cur-box {
+  padding: 20rpx 30rpx;
+  margin: 46rpx;
+  background: #42a9f4;
+  color: #fff;
+  width: 87vw;
+  min-height: 15vh;
+  border-radius: 5px;
+}
+
+.cur-box .iconfont {
+  margin-left: 15rpx;
+  font-size: 50rpx;
+}
+
+.container .iconfont.icon-voice2 {
+  font-size: 32rpx;
+  margin:0;
+}
+
+.container .cur-box .text {
+  margin-top: 8rpx;
+}
+
+.cur-box .icon-group {
+  /* height: 70rpx; */
+}
+
+textarea {
+  max-height: 200rpx;
+}
+
+.phonetic {
+  margin-left: 5rpx;
+}
+
+.container .explains .title {
+  color:#333;
+}
+
+.container .explains {
+  background: #fff;
+  color: rgb(121, 120, 120);
+  width: 100vw;
+  border-radius: 5px;
+  font-size: 30rpx;
+}
+
+.container .explains.nopadding {
+  padding: 0;
+}
+
+.container .explains.haspadding {
+  padding: 20rpx 30rpx;
+}
+
+.explains-item {
+  padding-left: 34rpx;
+}
+.icon-fuzhi:active{
+  color: rgb(87, 144, 177);
+  background: #fff;
+}

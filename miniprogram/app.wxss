@@ -1,0 +1,62 @@
+/**app.wxss**/
+@import "./style/reset.wxss";
+@import "./style/icon.wxss";
+
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+
+}
+
+.container > view {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.text-bottom{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex: 1;
+  color: #4285f4;
+  font-size: 35rpx;
+}
+
+.copyright{
+  font-size: 30rpx;
+  color: #ccc;
+}
+
+.icon-star__,.icon-shoucang{
+  font-size: 50rpx;
+}
+.iconfont.icon-star__.right{
+  color: yellow;
+}
+
+.list{
+color: #fff;
+}
+
+.list .item{
+  width:92vw;
+  margin: 15rpx auto;
+  background: #42a9f4;
+  padding: 20rpx;
+  border-radius: 5rpx;
+  justify-content: space-between;
+}
+.list .item .content{
+  width: 79vw;
+}
+
+.list .item .content > text{
+  overflow-x: scroll;
+  word-break: break-all;
+  font-size: 35rpx;
+  margin-bottom: 10rpx;
+}

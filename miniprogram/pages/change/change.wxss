@@ -1,0 +1,10 @@
+/* pages/change/change.wxss */
+@import "./../../style/guide.wxss";
+
+.item{
+  text-indent: 40rpx;
+  line-height: 85rpx;
+}
+.item:last-of-type{
+  border: none;
+}

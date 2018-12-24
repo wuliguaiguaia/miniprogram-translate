@@ -1,0 +1,6 @@
+<!--pages/about/about.wxml-->
+<view class='container'>
+  <view class='conent'>
+  <text>我现在要去疯魔啦，下次弄~</text></view>
+  <text>(不知道说些什么，欢迎留言建议)</text>
+</view>

@@ -1,0 +1,44 @@
+<!--index.wxml-->
+<view class="container">
+  <view class='control flex-between'>
+    <view bindtap='onChoosePrevLang'>{{prevLang.chs}}
+      <icon class='iconfont  icon-arrowdownb'></icon>
+    </view>
+    <text class="change iconfont icon-transfer" bindtap='onChangeOrigin'></text>
+    <view bindtap='onChooseCurLang'>{{curLang.chs}}
+      <icon class='iconfont  icon-arrowdownb'></icon>
+    </view>
+  </view>
+  <view class='prev-box'>
+    <view class='prev-top' hidden='{{!query}}'>
+      <icon class='iconfont icon-voice2' bindtap='onGetprevVoice'>  {{allTranistion.prevChs}}  </icon>
+      <icon class='iconfont icon-delete fr' bindtap='onTapClose' hidden="{{hideCloseIcon}}"></icon>
+    </view>
+    <textarea placeholder='请输入文本' bindinput='onInput' bindconfirm='onConfirm' bindblur='onConfirm' value="{{query}}">
+    </textarea>
+  </view>
+  <view class='cur-box'>
+    <view class='icon-group'>
+      <icon class='iconfont icon-voice2' bindtap='onGetcurVoice'> {{allTranistion.curChs}} </icon>
+      
+      <icon class='fr iconfont icon-fuzhi' bindtap='onCopy'></icon>
+      <icon class='iconfont icon-shoucang fr' bindtap='onLike' hidden='{{isLike}}'></icon>
+      <icon class='iconfont icon-star__ right fr' bindtap='onUnLike' hidden="{{!isLike}}"></icon>
+    </view>
+    <view class='text'>
+      <text  selectable="true">{{result}}</text>
+      <!-- <view hidden="{{!allTranistion.wfs}}">
+        <text>词性：</text>
+        <view wx:for="{{allTranistion.wfs}}" wx:key="index">{{item.wf.name}}: {{item.wf.value}}</view>
+      </view> -->
+    </view>
+  </view>
+  <view wx:if="{{allTranistion.explains.length>0}}" class='explains {{allTranistion.explains.length > 0 ? "haspadding" : "nopadding"}}'>
+    <view style='margin-bottom:20rpx;' bindtap='onGetprevVoice' hidden="{{!allTranistion.phonetic}}">
+      <icon class='iconfont icon-voice2'></icon>
+      <text class='phonetic'> /{{allTranistion.phonetic}}/ </text>
+    </view>
+    <text class='title'>解释：</text>
+    <view class="explains-item" wx:for="{{allTranistion.explains}}" wx:key="index">{{item}}</view>
+  </view>
+</view>
