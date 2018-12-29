@@ -2,11 +2,11 @@
 
 <view class='container'>
   <view class='flex form'>
-    <input type="text" placeholder='留个言吧~' bindinput='bindContentInput' value='{{content}}' />
+    <input type="text" placeholder='留个言吧~' bindinput='bindContentInput' value='{{content}}' bindconfirm='onSend'/>
     <button form-type="submit" bindtap='onSend' plain='true' hover-class='none'>发表</button>
   </view>
   <scroll-view scroll-y class='list'>
-    <view class="item" style="background-color:{{colorArr[index]}}" wx:for="{{messages}}" wx:for-index="index" wx:for-item="message" wx:key="index" data-name="{{message.name}}" data-time="{{message.time}}" data-content="{{message.content}}" bindlongpress='onDeleteMes'>
+    <view class="item" style="background-color:{{colorArr[index]}}" wx:for="{{messages}}" wx:for-index="index" wx:for-item="message" wx:key="index" data-name="{{message.name}}" data-time="{{message.time}}" data-index="{{index}}" data-content="{{message.content}}" bindlongpress='onDeleteMes'>
       <view class='top flex'>
         <view class='pic'>
           <image src='{{message.avatar}}' alt="头像" style="width: 75rpx; height: 75rpx; margin-right:30rpx;border-radius:50%" mode=''></image>

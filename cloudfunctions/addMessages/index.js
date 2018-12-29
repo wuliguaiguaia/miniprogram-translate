@@ -1,14 +1,13 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
-
 cloud.init();
-
 const db = cloud.database({
-  env: "test-263ef7"
+  env: "mini2048-263ef7"
 })
 
 // 云函数入口函数
 exports.main = async (event, context) => {
+  console.log(event,context)
   let res = await db.collection("message-trans").add({
     data: {
       name: event.name,

@@ -1,1 +1,7 @@
 /* pages/history/history.wxss */
+.icon-history{
+  margin-right: 15rpx;
+}
+.iconfont.icon-delete{
+  margin-left: 15rpx;
+}

@@ -19,7 +19,7 @@
     <navigator url="../message/message" open-type="navigate" class="uploader-text">
       <icon class='iconfont icon-message-circle'></icon>
       <text>欢迎留言</text>
-      <button open-type='getUserInfo' bindgetuserinfo="onGotUserInfo" hover-class="none" plain="true"></button>
+      <button open-type='getUserInfo' bindgetuserinfo="onGotUserInfo" hover-class="none" plain="{{plain}}"></button>
     </navigator>
   </view>
   <view class='about'>

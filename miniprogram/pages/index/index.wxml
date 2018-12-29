@@ -1,25 +1,25 @@
 <!--index.wxml-->
 <view class="container">
   <view class='control flex-between'>
-    <view bindtap='onChoosePrevLang'>{{prevLang.chs}}
+    <view bindtap='onChoosePrevLang' animation="{{animationPrev}}">{{prevLang.chs}}
       <icon class='iconfont  icon-arrowdownb'></icon>
     </view>
     <text class="change iconfont icon-transfer" bindtap='onChangeOrigin'></text>
-    <view bindtap='onChooseCurLang'>{{curLang.chs}}
+    <view bindtap='onChooseCurLang' animation="{{animationCur}}">{{curLang.chs}}
       <icon class='iconfont  icon-arrowdownb'></icon>
     </view>
   </view>
   <view class='prev-box'>
     <view class='prev-top' hidden='{{!query}}'>
-      <icon class='iconfont icon-voice2' bindtap='onGetprevVoice'>  {{allTranistion.prevChs}}  </icon>
-      <icon class='iconfont icon-delete fr' bindtap='onTapClose' hidden="{{hideCloseIcon}}"></icon>
+      <icon class='iconfont icon-voice2 {{isSayingPrev1 ? "icon-audio" : ""}}'  data-index="1" bindtap='onGetprevVoice'>  {{allTranistion.prevChs}}  </icon>
+      <icon class='iconfont icon-delete fr' animation="{{animationClose}}" catchtap='onTapClose' hidden="{{hideCloseIcon}}"></icon>
     </view>
     <textarea placeholder='请输入文本' bindinput='onInput' bindconfirm='onConfirm' bindblur='onConfirm' value="{{query}}">
     </textarea>
   </view>
   <view class='cur-box'>
     <view class='icon-group'>
-      <icon class='iconfont icon-voice2' bindtap='onGetcurVoice'> {{allTranistion.curChs}} </icon>
+      <icon class='iconfont icon-voice2 {{isSayingCur ? "icon-audio" : ""}}' bindtap='onGetcurVoice'> {{allTranistion.curChs}} </icon>
       
       <icon class='fr iconfont icon-fuzhi' bindtap='onCopy'></icon>
       <icon class='iconfont icon-shoucang fr' bindtap='onLike' hidden='{{isLike}}'></icon>
@@ -34,8 +34,8 @@
     </view>
   </view>
   <view wx:if="{{allTranistion.explains.length>0}}" class='explains {{allTranistion.explains.length > 0 ? "haspadding" : "nopadding"}}'>
-    <view style='margin-bottom:20rpx;' bindtap='onGetprevVoice' hidden="{{!allTranistion.phonetic}}">
-      <icon class='iconfont icon-voice2'></icon>
+    <view style='margin-bottom:20rpx;' bindtap='onGetprevVoice' data-index="2" hidden="{{!allTranistion.phonetic}}">
+      <icon class='iconfont icon-voice2 {{isSayingPrev2 ? "icon-audio" : ""}}'></icon>
       <text class='phonetic'> /{{allTranistion.phonetic}}/ </text>
     </view>
     <text class='title'>解释：</text>

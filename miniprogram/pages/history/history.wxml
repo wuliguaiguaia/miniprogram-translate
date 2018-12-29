@@ -8,7 +8,9 @@
         <text>{{history.result}}</text>
       </view>
       {{history.chs}}
-      <icon class='iconfont icon-delete' catchtap='onDeleteThis' data-index="index"></icon>
+      <icon class='iconfont icon-shoucang' catchtap='catchLike' hidden="{{history.isLike}}" data-item="{{history}}" data-index="{{index}}"></icon>
+      <icon class='iconfont icon-star__ right' catchtap='catchUnLike' hidden="{{!history.isLike}}" data-item="{{history}}" data-index="{{index}}"></icon>
+      <icon class='iconfont icon-delete' catchtap='onDeleteThis' data-index="{{index}}"></icon>
     </view>
   </view>
   <view class='text-bottom'>

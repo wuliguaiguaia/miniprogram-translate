@@ -2,24 +2,27 @@
 App({
   onLaunch: function() {
     wx.cloud.init({
-      env: 'test-263ef7',
+      env: 'mini2048-263ef7',
       traceUser: true,
     })
     wx.cloud.callFunction({
       name: "login",
       complete: res => {
-        console.log(res);
+        console.log(res)
         this.globalData.userid = res.result.openid;
       },
       fail: () => {
         console.log("云函数 login 调用失败")
       }
     })
-    this.globalData.prevLang = wx.getStorageSync("trans-prevLang") || {
+    this.globalData.langList[999] = {
       chs: "自动检测",
-      index:"999"
-    };
-    this.globalData.curLang = wx.getStorageSync("trans-curLang") || this.globalData.langList[0];
+      index: "999",
+      lang: "auto"
+    }
+    this.globalData.prevLang = wx.getStorageSync("trans_prevLang") || this.globalData.langList[999];
+    this.globalData.curLang = wx.getStorageSync("trans_curLang") || this.globalData.langList[0];
+    
   },
   globalData: {
     userid: "",

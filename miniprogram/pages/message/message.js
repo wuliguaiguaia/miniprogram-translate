@@ -4,8 +4,9 @@ Page({
   data: {
     content: "",
     messages: [],
-    userInfo: {},
-    colorArr: ["#ff7e40","#ff8700", "#bfae30","#8742d6","#37db79","#fc3f4d", "#9c62d6", "#20805e","#ffa073","#35d59d","#ff4040","#ff5300","#b9f73e"],
+    colorDIY: ["#ff7e40", "#ff8700", "#bfae30", "#8742d6", "#37db79", "#fc3f4d", "#9c62d6", "#20805e", "#ffa073", "#35d59d", "#ff4040", "#ff5300", "#769e25"], 
+    colorArr: [],
+    mesId:""
   },
   bindContentInput(e) {
     this.setData({
@@ -16,10 +17,8 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
+  
   onLoad: function() {
-    this.setData({
-      userInfo: app.globalData.userInfo
-    })
     wx.cloud.callFunction({
       name: "getAllMessages",
       success: res => {
@@ -29,19 +28,14 @@ Page({
           messages: mes
         });
 
-
         // 背景色：
-        let color = this.data.colorArr;
-        color.sort((x) => {
-          return Math.random() > 0.5 ? 1 : -1;
-        })
-        let n = this.data.messages.length - color.length;
-        console.log(n);
-        for (let i = 0; i < n; i++) {
-          color.unshift(color[parseInt(Math.random() * 10 % color.length)])
+        let colorArr = this.data.colorArr;
+        let diy = this.data.colorDIY;
+        for (let i = 0; i < this.data.messages.length; i++) {
+          colorArr.push(diy[parseInt(Math.random() * 10 % diy.length)])
         }
         this.setData({
-          colorArr:color
+          colorArr
         });
       },
       fail: () => {
@@ -49,23 +43,22 @@ Page({
       }
     });
   },
-
-  formateTime(data) {
-    let day = data.toLocaleDateString();
-    let time = data.toTimeString().slice(0, 8);
-    return day + " " + time
+  formateTime(date) {
+    let day = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    let time = date.toTimeString().slice(0, 8);
+    return day + " " + time;
   },
 
   onSend() {
     let data = {
-      name: this.data.userInfo.name,
+      name: app.globalData.userInfo.name,
+      avatar:app.globalData.userInfo.avatar,
       content: this.data.content,
       time: this.formateTime(new Date()),
-      avatar: this.data.userInfo.avatar
     };
     if (!data.name || !data.content || !data.avatar) {
       wx.showToast({
-        title: '留言失败，请检查网络',
+        title: '留言失败',
       })
       return;
     }
@@ -87,10 +80,11 @@ Page({
           content: ""
         })
         // 背景颜色
-        let color = this.data.colorArr;
-        color.unshift(color[parseInt(Math.random() * 10 % color.length)])
+        let colorArr = this.data.colorArr;
+        let diy = this.data.colorDIY;
+        colorArr.unshift(diy[parseInt(Math.random() * 10 % diy.length)])
         this.setData({
-          colorArr: color
+          colorArr
         })
       },
       fail() {
@@ -102,42 +96,38 @@ Page({
   // 删除留言
   onDeleteMes(e) {
     let time = e.currentTarget.dataset.time;
-    // 确认是当前用户，才可以删除
-    wx.cloud.callFunction({
-      name: "deleteMessage",
-      data: {
-        time
-      },
-      success: res => {
-        console.log(res)
-      },
-      fail() {
-        console.log("云函数 deletemessgae调用失败")
-      }
-    })
-    // get({
-    // success:(res) => {
-    // res.data 是包含以上定义的两条记录的数组
-    // console.log(res.data)
-    let mes = this.data.messages;
-    let index = mes.findIndex((item) => {
-      return item.time === time
-    })
+    let index = e.currentTarget.dataset.index;
+    if(app.globalData.userInfo.name !== e.currentTarget.dataset.name)  return;
     wx.showModal({
       title: '提示',
       content: '是否删除该留言',
       success: (res) => {
         if (res.confirm) {
-          mes.splice(index, 1);
-          this.setData({
-            messages: mes
-          });
+          // 确认是当前用户，才可以删除
+          wx.cloud.callFunction({
+            name: "deleteMessage",
+            data: {
+              time,
+              name:app.globalData.userInfo.name
+            },
+            success: res => {
+              let messages = this.data.messages;
+              let colorArr = this.data.colorArr;
+              colorArr.splice(index, 1);
+              messages.splice(index, 1);
+              this.setData({
+                messages,
+                colorArr
+              });
+            },
+            fail() {
+              console.log("云函数 deletemessgae调用失败")
+            }
+          })
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
       }
     })
-    // }
-    // })
   }
 })

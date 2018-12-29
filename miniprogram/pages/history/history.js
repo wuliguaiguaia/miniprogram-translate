@@ -1,5 +1,10 @@
 // pages/history/history.js
+import FAVORITE from "./../../utils/favorite.js";
+import STORAGE from "./../../utils/storage_his.js";
+
 let app = getApp();
+const db = wx.cloud.database();
+
 Page({
 
   /**
@@ -7,36 +12,11 @@ Page({
    */
   data: {
     histories: [],
-    clearAlltag: true
+    clearAlltag: true,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function(options) {
-    let his = wx.getStorageSync("trans_his");
-    if (!his.length) {
-      this.setData({
-        clearAlltag: false
-      })
-    }
-    this.setData({
-      histories: his
-    })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function() {
-    let his = wx.getStorageSync("trans_his");
+    let his =STORAGE.get();
     if (!his.length) {
       this.setData({
         clearAlltag: false
@@ -51,34 +31,76 @@ Page({
     })
   },
   onDeleteThis(e) {
-    console.log(e);
-    let his = wx.getStorageSync("trans_his");
+    let his = this.data.histories;
     let index = e.currentTarget.dataset.index;
     his.splice(index, 1);
     this.setData({
       histories: his
     });
-    wx.setStorageSync('trans_his', his)
-    console.log(his);
   },
+
 
   onClearHis() {
     this.setData({
       histories: []
     });
-    wx.setStorageSync("trans_his", []);
     this.setData({
       clearAlltag: false
     })
   },
+
   onReview(e) {
     let data = e.currentTarget.dataset.history;
     app.globalData.prevLang = data.prevLang;
     app.globalData.curLang = data.curLang
-    console.log(data);
     wx.reLaunch({
       url: `../index/index?query=${data.query}&result=${data.result}`,
     })
-  }
+  },
+
+  // 喜欢
+  catchLike(e) {
+    console.log("喜欢")
+    let index = e.currentTarget.dataset.index;
+    let item = e.currentTarget.dataset.item;
+    let data = {
+      query: item.query,
+      result: item.result,
+      prevLang: item.prevLang,
+      curLang: item.curLang
+    }
+    FAVORITE.like(data).then((res)=>{
+      let his = this.data.histories;
+      his[index].isLike = true;
+      this.setData({
+        histories: his
+      });
+    })
+  },
+  // 不喜欢
+  catchUnLike(e) {
+    console.log("不喜欢")
+    let index = e.currentTarget.dataset.index;
+    let item = e.currentTarget.dataset.item;
+    let data = {
+      query: item.query,
+      result: item.result
+    };
+    FAVORITE.unLike(data).then((res) => {
+      let his = this.data.histories;
+      his[index].isLike = false;
+      this.setData({
+        histories: his
+      });
+    })
+  },
+
+  onHide() {
+    STORAGE.save(this.data.histories)
+    console.log('likai')
+  },
+  onUnload() {
+    this.onHide();
+  },
 
 })

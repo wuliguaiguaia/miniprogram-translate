@@ -53,10 +53,12 @@ color: #fff;
 .list .item .content{
   width: 79vw;
 }
+text{
+  word-break: break-all;
+}
 
 .list .item .content > text{
-  overflow-x: scroll;
-  word-break: break-all;
   font-size: 35rpx;
   margin-bottom: 10rpx;
 }
+

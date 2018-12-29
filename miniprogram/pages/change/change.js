@@ -43,12 +43,12 @@ Page({
       chooseIndex: chooseLang.index
     });
     if (this.data.refer == "prev") {
-      console.log(1, chooseLang)
       app.globalData.prevLang = chooseLang;
+      wx.setStorageSync('trans_prevLang', chooseLang);
       
     } else if (this.data.refer == "cur"){
-      console.log(2)
       app.globalData.curLang = chooseLang;
+      wx.setStorageSync('trans_curLang', chooseLang);
     }
     setTimeout(() => {
       wx.switchTab({

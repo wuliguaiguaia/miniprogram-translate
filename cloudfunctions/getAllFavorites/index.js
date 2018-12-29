@@ -9,5 +9,8 @@ const db = cloud.database({
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  return await db.collection("message-trans").get();
+  console.log(event)
+  return await db.collection("favorite-trans").where({
+    _openid:event.userInfo.openId
+  }).get();
 }

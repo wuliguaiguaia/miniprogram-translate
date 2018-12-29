@@ -1,26 +1,40 @@
 //index.js
-import translate from "./../../utils/textapi.js"
+import translate from "./../../utils/textapi.js";
+import STORAGE from "./../../utils/storage_his.js";
+import FAVORITE from "./../../utils/favorite.js"
+
 const app = getApp();
 const db = wx.cloud.database();
 Page({
   data: {
     prevLang: {},
     curLang: {},
-    query: "hello world",
+    animationPrev: {},
+    animationCur: {},
+    animationClose: {},
+    query: "",
     hideCloseIcon: false,
     allTranistion: {},
     result: "",
     isLike: false,
+    isSayingPrev1: false,
+    isSayingPrev2: false,
+    isSayingCur: false,
+    confirmFlag: false
   },
   onLoad(options) {
     this.setAppData();
+
     if (options.query) {
       this.setData({
         query: options.query,
         result: options.result,
       });
+    } else {
+      this.setData({
+        query: wx.getStorageSync("trans_query") || "Hello world"
+      })
     }
-    this.onConfirm();
   },
   setAppData() {
     this.setData({
@@ -31,34 +45,24 @@ Page({
   onShow() {
     this.setAppData();
     this.onConfirm();
-    this.onCheckFavorite();
   },
-  onCheckFavorite() {
+  onCheckFavorite(d) {
+    let data = {
+      query: d.query,
+      result: d.result
+    }
     return new Promise((resolve, reject) => {
-      db.collection("favorite-trans").where({
-        _openid: app.globalData.userid,
-        query: this.data.query,
-        result: this.data.result
-      }).get({
-        success: (res) => {
-          if (res.data.length > 0) {
-            console.log("已经收藏了 ！！")
-            this.setData({
-              isLike: true
-            })
-            resolve(res.data)
-          } else {
-            this.setData({
-              isLike: false
-            })
-            reject({
-              "favorite_status": false
-            })
-          }
-        },
-        fail() {
-          console.log("检查是否收藏失败")
+      FAVORITE.check(data).then((flag) => {
+        if (flag) {
+          this.setData({
+            isLike: true
+          })
+        } else {
+          this.setData({
+            isLike: false
+          })
         }
+        resolve()
       })
     })
   },
@@ -69,54 +73,77 @@ Page({
       })
       return;
     }
-    db.collection("favorite-trans").add({
-      data: {
-        query: this.data.query,
-        result: this.data.result,
-        prevLang: this.data.prevLang,
-        curLang: this.data.curLang,
-      },
-      success: (res) => {
-        wx.showToast({
-          title: '收藏成功',
-        });
-        this.setData({
-          isLike: true
-        })
-      },
-      fail() {
-        console.log("收藏失败")
-      }
+    let data = {
+      query: this.data.query,
+      result: this.data.result,
+      prevLang: this.data.prevLang,
+      curLang: this.data.curLang,
+    }
+    FAVORITE.like(data).then((res) => {
+      wx.showToast({
+        title: '收藏成功',
+      });
+      this.setData({
+        isLike: true
+      });
+
+      // history
+      STORAGE.isLike_change(data,true)
+
     })
     console.log('喜欢')
   },
   onUnLike() {
-    db.collection("favorite-trans").where({
-      _openid: app.globalData.userid,
+    let data = {
       query: this.data.query,
-      result: this.data.result
-    }).get({
-      success: (res) => {
-        let id = res.data[0]._id;
-        db.collection("favorite-trans").doc(id).remove();
-        this.setData({
-          isLike: false
-        })
-      }
+      result: this.data.result,
+      curLang:this.data.curLang
+    }
+    FAVORITE.unLike(data).then((res) => {
+      this.setData({
+        isLike: false
+      });
+      STORAGE.isLike_change(data,false)
     })
     console.log('不喜欢')
   },
   onChangeOrigin() {
     [app.globalData.curLang, app.globalData.prevLang] = [app.globalData.prevLang, app.globalData.curLang];
-    this.setData({
-      curLang: app.globalData.prevLang,
-      prevLang: app.globalData.curLang
+    wx.setStorageSync('trans_prevLang', app.globalData.prevLang);
+    wx.setStorageSync('trans_curLang', app.globalData.curLang);
+    const animation1 = wx.createAnimation({
+      duration: 1000,
+      timingFunction: 'ease',
     });
+    const animation2 = wx.createAnimation({
+      duration: 1000,
+      timingFunction: 'ease',
+    })
+    animation1.translateX(65).step();
+    animation2.translateX(-65).step();
+    this.setData({
+      animationPrev: animation1.export(),
+      animationCur: animation2.export(),
+    });
+    setTimeout(() => {
+      animation1.translateX(0).step();
+      animation2.translateX(0).step();
+      this.setData({
+        animationPrev: animation1.export(),
+        animationCur: animation2.export(),
+      });
+      this.setData({
+        curLang: app.globalData.curLang,
+        prevLang: app.globalData.prevLang
+      });
+    }, 500);
+
+
   },
   onChooseCurLang() {
     wx.navigateTo({
       url: `./../change/change?query=${this.data.curLang.index}&refer=cur`,
-    })
+    });
   },
   onChoosePrevLang() {
     wx.navigateTo({
@@ -125,7 +152,7 @@ Page({
   },
   onInput(e) {
     this.setData({
-      query: e.detail.value
+      query: e.detail.value,
     });
     if (this.data.query.length) {
       this.setData({
@@ -138,17 +165,32 @@ Page({
     }
   },
   onTapClose() {
+    const animation = wx.createAnimation({
+      duration: 300,
+      timingFunction: 'ease',
+    });
+    animation.rotate(360).step();
     this.setData({
-      query: "",
-      hideCloseIcon: true,
-    })
+      animationClose: animation.export()
+    });
+    setTimeout(() => {
+      animation.rotate(0).step();
+      this.setData({
+        animationClose: animation.export()
+      });
+      this.setData({
+        query: "",
+        hideCloseIcon: true,
+      });
+    }, 300)
   },
   onConfirm() {
     if (!this.data.query) {
       return
     };
+    let q = this.data.query.trim();
     translate({
-      q: this.data.query,
+      q,
       from: app.globalData.prevLang.lang,
       to: app.globalData.curLang.lang
     }).then((data) => {
@@ -174,6 +216,10 @@ Page({
           wfs = data.basic.wfs
         }
       }
+      if (q.split(" ").length > 1) {
+        explains = [];
+      }
+
       this.setData({
         result: data.translation,
         allTranistion: {
@@ -184,61 +230,61 @@ Page({
           wfs,
           prevChs: prev.chs,
           curChs: cur.chs,
-        }
+        },
       })
-
-      // history
-      let xdata = {
-        query: this.data.query,
-        result: this.data.result,
-        prevLang: this.data.prevLang,
-        curLang: this.data.curLang,
-      }
-      let his = wx.getStorageSync("trans_his") || [];
-      let index = his.findIndex((item) => {
-        if (item.query === xdata.query) {
-          return item.curLang.index === xdata.curLang.index;
-        }
+      // islike
+      this.onCheckFavorite({
+        query: q,
+        result: this.data.result
+      }).then(() => {
+        // history
+        this.historySet()
       });
-      if (index >= 0) {
-        his.splice(index, 1)
-      }
-      his.unshift(xdata);
-      wx.setStorageSync("trans_his", his);
-
     }, (err) => {
       console.log(err)
     });
-
-    // showStar 应该放在 success
-    db.collection("favorite-trans").where({
-      _openid: app.globalData.userid,
-      query: this.data.query,
-      result: this.data.result,
-    }).get({
-      success: (res) => {
-        if (res.data.lenght > 0) {
-          console.log(res, '已经收藏了');
-          this.setData({
-            isLike: true
-          })
-        } else {
-          this.setData({
-            isLike: false
-          })
-        }
-      },
-      fail: (res) => {
-        console.log('x')
-      }
-    })
   },
-  onGetprevVoice() {
+  historySet() {
+    let xdata = {
+      query: this.data.query.trim(),
+      result: this.data.result,
+      prevLang: this.data.prevLang,
+      curLang: this.data.curLang,
+      isLike: this.data.isLike
+    }
+    STORAGE.confirm_change(xdata);
+    wx.setStorageSync('trans_query', xdata.query);
+
+  },
+  onGetprevVoice(e) {
+    console.log(e.currentTarget.dataset)
+    let index = e.currentTarget.dataset.index;
     const audio = wx.createInnerAudioContext()
     audio.src = this.data.allTranistion.speakUrl;
     audio.play()
     audio.onPlay(() => {
+      if (index == 1) {
+        this.setData({
+          isSayingPrev1: true
+        });
+      } else if (index == 2) {
+        this.setData({
+          isSayingPrev2: true
+        });
+      }
       console.log('开始播放')
+    })
+    audio.onEnded(() => {
+      if (index == 1) {
+        this.setData({
+          isSayingPrev1: false
+        });
+      } else if (index == 2) {
+        this.setData({
+          isSayingPrev2: false
+        });
+      }
+      console.log("播放结束")
     })
     audio.onError((res) => {
       console.log(res)
@@ -248,10 +294,19 @@ Page({
   onGetcurVoice() {
     const audio = wx.createInnerAudioContext()
     audio.src = this.data.allTranistion.tSpeakUrl;
-    audio.play()
+    audio.play();
 
     audio.onPlay(() => {
       console.log('开始播放')
+      this.setData({
+        isSayingCur: true
+      })
+    })
+    audio.onEnded(() => {
+      console.log('播放结束')
+      this.setData({
+        isSayingCur: false
+      })
     })
     audio.onError((res) => {
       console.log(res)
@@ -259,35 +314,29 @@ Page({
     console.log("onGetcurVoice", this.data.allTranistion.tSpeakUrl)
   },
   onCopy() {
+    let flag = 1;
     if (!this.data.query) {
       wx.showToast({
         title: '啥都没有',
       })
-      return
+      flag = 0
     }
-    if (!this.data.result) {
-      wx.showModal({
-        title: '有内容吗你复制',
-        content: '确认翻译会吗',
-        success: (res) => {
-          if (res.confirm) {
-            this.onConfirm();
-            wx.showToast({
-              title: '这就对了',
-            })
-          }
+    if (flag) {
+      wx.setClipboardData({
+        data: String(this.data.result),
+        success: res => {
+          wx.showToast({
+            title: '复制成功',
+          })
         }
       })
-      return;
     }
-    console.log(typeof this.data.result)
-    wx.setClipboardData({
-      data: String(this.data.result),
-      success: res => {
-        wx.showToast({
-          title: '复制成功',
-        })
-      }
-    })
-  }
+  },
+  onHide() {
+
+  },
+  onUnload() {
+
+    console.log("leave index")
+  },
 })

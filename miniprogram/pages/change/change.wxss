@@ -4,6 +4,7 @@
 .item{
   text-indent: 40rpx;
   line-height: 85rpx;
+  height:85rpx;
 }
 .item:last-of-type{
   border: none;

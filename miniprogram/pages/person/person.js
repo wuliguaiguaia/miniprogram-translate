@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    plain:true
   },
 
   /**
@@ -36,7 +36,8 @@ Page({
         avatar: detail.avatarUrl,
       }
     })
-    app.globalData.userInfo = this.data.userInfo
+    app.globalData.userInfo = this.data.userInfo;
+    console.log(app.globalData.userInfo)
   },
 
   /**
