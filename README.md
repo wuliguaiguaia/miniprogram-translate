@@ -10,7 +10,7 @@
 - 动画
 - 等等
 
-##项目截图
+## 项目截图
 <img src="./asset/tabbar.jpg" width="100%">
 留言页面
 
