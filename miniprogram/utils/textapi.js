@@ -1,8 +1,8 @@
 import md5 from "./md5.js";
 //
 
-const appKey = "340d2a88d3cde6e3";
-const key = "dRemc3AADeqvGbb07L9IYwNCIpnctId3";
+const appKey = "xxxx";
+const key = "xxxxxx";
 
 function translate({ q, from, to }) {
   return new Promise((resolve, reject) => {
