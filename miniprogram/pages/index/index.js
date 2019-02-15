@@ -204,9 +204,17 @@ Page({
       let prev = app.globalData.langList.find((x) => {
         return x.lang == prevL
       });
-      let cur = app.globalData.langList.find((x) => {
-        return x.lang == curL
+      // let cur = app.globalData.langList.find((x) => {
+      //   return x.lang == curL
+      // });
+      let cur = {};
+      app.globalData.langList.forEach((x) => {
+        if(x.lang == curL){
+          cur = x;
+          return;
+        }
       });
+
       if (data.basic) {
         explains = data.basic.explains;
         if (data.basic.phonetic) {

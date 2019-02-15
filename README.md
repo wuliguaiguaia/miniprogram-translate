@@ -19,3 +19,6 @@
 ## 小程序二维码
 <img src="./asset/xx.jpg">
 
+## 项目相关博客
+[小程序总结之翻译小程序](https://zhuanlan.zhihu.com/p/53102589)
+
