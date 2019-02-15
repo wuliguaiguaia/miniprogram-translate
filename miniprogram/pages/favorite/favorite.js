@@ -1,4 +1,3 @@
-// pages/favorite/favorite.js
 import FAVORITE from "./../../utils/favorite.js";
 import STORAGE from "./../../utils/storage_his.js";
 let app = getApp();
